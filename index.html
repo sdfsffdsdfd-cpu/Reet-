@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy One Month, Reet! ❤️</title>
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+            --text-main: #c9d1d9;
+            --accent-pink: #ff7b72;
+            --accent-green: #7ee787;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 15px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            z-index: 10;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 6px;
+            margin-right: 12px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .dot.r { background: #ff5f56; }
+        .dot.y { background: #ffbd2e; }
+        .dot.g { background: #27c93f; }
+
+        h1 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-main);
+            font-family: monospace;
+        }
+
+        .counter-box {
+            background: rgba(255, 123, 114, 0.1);
+            border: 1px dashed var(--accent-pink);
+            border-radius: 6px;
+            padding: 12px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 13px;
+            margin-bottom: 20px;
+            color: var(--accent-pink);
+            line-height: 1.4;
+        }
+
+        .letter-content {
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 140px;
+            white-space: pre-wrap;
+            margin-bottom: 24px;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 16px;
+            background: var(--accent-pink);
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        .question-box {
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+        }
+
+        .question-box p {
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            position: relative;
+            height: 140px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            height: 45px;
+        }
+
+        .btn-yes {
+            background-color: #238636;
+            color: white;
+            border-color: rgba(240,246,252,0.1);
+            z-index: 5;
+        }
+
+        .btn-no {
+            background-color: #21262d;
+            color: #f0f6fc;
+            border-color: var(--border-color);
+            position: absolute;
+            transition: all 0.15s ease-out;
+            z-index: 10;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 123, 114, 0.4);
+            font-size: 20px;
+            animation: floatUp 4s linear infinite;
+            bottom: -50px;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-105vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <div class="terminal-dots">
+                <div class="dot r"></div>
+                <div class="dot y"></div>
+                <div class="dot g"></div>
+            </div>
+            <h1>one_month_complete.sh</h1>
+        </div>
+
+        <!-- Relationship Timer -->
+        <div class="counter-box" id="timer">
+            Calculating our exact duration...
+        </div>
+
+        <!-- Typing Letter Effect -->
+        <div class="letter-content"><span id="typing-text"></span><span class="cursor"></span></div>
+
+        <!-- Interactive Question Section -->
+        <div class="question-box" id="questionSection">
+            <p id="questionText">We have completed our one month, and if you are free for the next 80 years, can you be with me? 🥺❤️</p>
+            <div class="btn-group">
+                <button class="btn btn-yes" onclick="celebrate()">Yes, forever! ✨</button>
+                <button class="btn btn-no" id="noBtn" onmouseover="moveNoButton()" onclick="moveNoButton()" ontouchstart="moveNoButton()">No</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set to September 3rd (Month index 8 is September in JS)
+        const anniversaryDate = new Date(2024, 8, 3, 0, 0); 
+
+        const message = "Hey Reet,\n\nHappy 1-Month Anniversary! 🥂\n\nI can't believe it's already been a full month since September 3rd. Every single day with you has been absolutely special. You bring so much joy into my life, and I am incredibly lucky to have you.\n\nThank you for this amazing month. I love you so much.\n\nYours always,\nSAUMOJIT 💻✨";
+
+        // Live Counter logic
+        function updateTimer() {
+            const now = new Date();
+            const diff = now - anniversaryDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((diff / 1000 / 60) % 60);
+            const seconds = Math.floor((diff / 1000) % 60);
+
+            document.getElementById('timer').innerText = 
+                `⏱️ Our Timeline: ${days} days, ${hours}h, ${minutes}m, ${seconds}s`;
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        // Typing effect logic
+        let index = 0;
+        function typeWriter() {
+            if (index < message.length) {
+                document.getElementById("typing-text").textContent += message.charAt(index);
+                index++;
+                setTimeout(typeWriter, 35);
+            }
+        }
+        window.onload = typeWriter;
+
+        // Mobile Evading Logic for the 'No' button
+        const noBtn = document.getElementById('noBtn');
+        noBtn.style.left = "60%";
+        noBtn.style.top = "0px";
+
+        function moveNoButton() {
+            const container = document.querySelector('.btn-group');
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+            
+            // Random mathematical limits ensuring it runs inside the box context
+            const randomX = Math.floor(Math.random() * (containerWidth - 75));
+            const randomY = Math.floor(Math.random() * (containerHeight - 45)); 
+
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+        }
+
+        function celebrate() {
+            document.getElementById('questionText').innerHTML = "<strong>Locking it in for the next 80 years! Best decision ever Reet! I love you! 🥰🎉🥂</strong>";
+            document.getElementById('questionSection').style.borderColor = "var(--accent-green)";
+            noBtn.style.display = 'none';
+            setInterval(createHeart, 100);
+        }
+
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerText = '❤️';
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            heart.style.fontSize = Math.random() * 20 + 10 + "px";
+            document.body.appendChild(heart);
+
+            setTimeout(() => { heart.remove(); }, 5000);
+        }
+        setInterval(createHeart, 400);
+    </script>
+</body>
+</html>
